@@ -25,8 +25,9 @@ class ViewController: UIViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let weight = Int(weightTB.text!)
-        let des = segue.destination as! MoonViewController
+        //let des = segue.destination as! MoonViewController
         if(segue.identifier == "toTheMoon"){
+            let des = segue.destination as! MoonViewController
             des.weightFromFirst = weight
             
         }

@@ -22,7 +22,7 @@ class MoonViewController: UIViewController {
         super.viewDidLoad()
         fromJupiterLbl.isHidden = true
         let weightOnEarth = weightFromFirst!
-        print(weightFromFirst)
+        //print(weightFromFirst)
         // Do any additional setup after loading the view.
         let weightOnMoon = calcMoonWeight(earthWeight: weightOnEarth)
         self.weightOnEarthTB.text = "Your Weight on Earth is: \(weightOnEarth)"
@@ -37,9 +37,10 @@ class MoonViewController: UIViewController {
     
     
     
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let des = segue.destination as! JupiterViewController
         if (segue.identifier == "toJupiter"){
+            let des = segue.destination as! JupiterViewController
             des.earthWeightFromMoon = weightOnEarthRtn
             des.moonWeightFromMoon = weightOnMoonRtn
         }
@@ -67,3 +68,4 @@ class MoonViewController: UIViewController {
     */
 
 }
+
