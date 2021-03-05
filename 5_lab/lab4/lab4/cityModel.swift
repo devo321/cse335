@@ -40,4 +40,13 @@ class cityModel{
             print(error.localizedDescription)
         }
     }
+    
+    func saveImg(insertCity: City, img: UIImage){
+        insertCity.image = img.pngData()! as Data
+        do{
+            try managedObjectContext?.save()
+        }catch{
+            print("Error While Saving")
+        }
+    }
 }

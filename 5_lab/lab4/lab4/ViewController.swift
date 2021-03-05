@@ -122,13 +122,7 @@ class ViewController: UIViewController,
         picker .dismiss(animated: true, completion: nil)
         
         if let city = fetchResults.last, let img = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            city.image = img.pngData()! as Data
-            updateLastRow()
-            do{
-                try managedObjectContext.save()
-            }catch{
-                print("Error While Saving")
-            }
+            self.c?.saveImg(insertCity: city, img: img)
             
         }
         self.cityTable.reloadData()
