@@ -70,6 +70,7 @@ class LogInViewController: UIViewController {
     
     func transitionToHome(){
         let homeView = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController)
+        //let homeView = storyboard?.instantiateViewController(identifier: "test")
         view.window?.rootViewController = homeView
         view.window?.makeKeyAndVisible()
     }
