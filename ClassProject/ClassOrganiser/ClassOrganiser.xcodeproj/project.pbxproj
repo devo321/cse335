@@ -20,6 +20,7 @@
 		4570DD472616E6C9008BFAEC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4570DD462616E6C9008BFAEC /* Assets.xcassets */; };
 		4570DD4A2616E6C9008BFAEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4570DD482616E6C9008BFAEC /* LaunchScreen.storyboard */; };
 		45B495DC2617E60C002E56F3 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B495DB2617E60C002E56F3 /* TestViewController.swift */; };
+		45E96605261EAFB7000775C5 /* GeneralUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E96604261EAFB7000775C5 /* GeneralUtilities.swift */; };
 		45EEAF2F2616FEAD0024972B /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EEAF2E2616FEAD0024972B /* SignUpViewController.swift */; };
 		45EEAF332616FEBA0024972B /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EEAF322616FEBA0024972B /* LogInViewController.swift */; };
 		45EEAF372616FEF70024972B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EEAF362616FEF70024972B /* ViewController.swift */; };
@@ -45,6 +46,7 @@
 		4570DD492616E6C9008BFAEC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4570DD4B2616E6C9008BFAEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		45B495DB2617E60C002E56F3 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		45E96604261EAFB7000775C5 /* GeneralUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUtilities.swift; sourceTree = "<group>"; };
 		45EEAF2E2616FEAD0024972B /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		45EEAF322616FEBA0024972B /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		45EEAF362616FEF70024972B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			children = (
 				45EEAF58261711280024972B /* AuthUtilities.swift */,
 				45F84E8526171CBF00524FF4 /* Constants.swift */,
+				45E96604261EAFB7000775C5 /* GeneralUtilities.swift */,
 				4531972C261BD1230049A47A /* DBUtilities.swift */,
 			);
 			path = Utilities;
@@ -289,6 +292,7 @@
 				45EEAF2F2616FEAD0024972B /* SignUpViewController.swift in Sources */,
 				45319731261BDC200049A47A /* ClassTableViewCell.swift in Sources */,
 				45B495DC2617E60C002E56F3 /* TestViewController.swift in Sources */,
+				45E96605261EAFB7000775C5 /* GeneralUtilities.swift in Sources */,
 				45098DE8261BDD2C00C21A48 /* ClassListTableViewController.swift in Sources */,
 				45F84E8626171CBF00524FF4 /* Constants.swift in Sources */,
 				45098DEC261BE24A00C21A48 /* UserClass.swift in Sources */,

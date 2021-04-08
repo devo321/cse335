@@ -21,15 +21,38 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     @IBOutlet weak var classLinkTF: UITextField!
     @IBOutlet weak var errorLbl: UILabel!
     
+    
+    var activeTextField:UITextField? = nil
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         errorLbl.isHidden = true
         classNameTF.delegate = self
+        //classAddressTF.delegate = self
+        //classLinkTF.delegate = self
         updateAddButtonState()
         // Do any additional setup after loading the view.
     }
     
     
+    //MARK: - Keyboard
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if self.view.frame.origin.y == 0 {
+                self.view.frame.origin.y -= keyboardSize.height - 200
+            }
+        }
+    }
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
+    }
+    
+    //MARK: - Image Picker
     @IBAction func imageGestureTapped(_ sender: UITapGestureRecognizer) {
         
         let alert = UIAlertController(title: "Choose Image", message: nil, preferredStyle: .actionSheet)
@@ -86,11 +109,31 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     }
     
     
+    //MARK: - Navigation Buttons
     
     @IBAction func addBtnTapped(_ sender: Any) {
-        
-        
-        
+        let className = self.classNameTF.text
+        let classDesc = self.classDescTF.text
+        let classDay = self.classDayTF.text
+        let classTime = self.classTimeTF.text
+        let classAddr = self.classAddressTF.text
+        let classLink = self.classLinkTF.text
+        if let classImg = self.classPhotoImg.image{
+            let dictionary:[String:String] = ["class_day":classDay ?? "", "class_time":classTime ?? ""]
+            let newClass = UserClass.init(name: className!, desc: classDesc ?? "", img: classImg, color: "black", link: classLink ?? "", location: classAddr ?? "", meetingTime: dictionary)
+            print("Class Image Success")
+            newClass.printClass()
+            let result = DBUtilities.addUserClass(newClass: newClass)
+            print(String(describing: result))
+        }
+        else{
+            let classImg = UIImage(named: "White-Square.jpg")
+            let dictionary:[String:String] = ["class_day":classDay ?? "", "class_time":classTime ?? ""]
+            let newClass = UserClass.init(name: className!, desc: classDesc ?? "", img: classImg!, color: "black", link: classLink ?? "", location: classAddr ?? "", meetingTime: dictionary)
+            print("Class Image Fail")
+            newClass.printClass()
+        }
+        dismiss(animated: true, completion: nil)
     }
     
     @IBAction func cancelBtnTapped(_ sender: Any) {
@@ -101,10 +144,15 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     //MARK: - UITextFieldDelegate
     func textFieldDidBeginEditing(_ textField: UITextField) {
         addBtn.isEnabled = false
+        self.activeTextField = textField
     }
+    
     func textFieldDidEndEditing(_ textField: UITextField) {
+        self.activeTextField = nil
         updateAddButtonState()
     }
+    
+
     
     
     //MARK: - Private Methods
@@ -112,16 +160,4 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
         let text = classNameTF.text ?? ""
         addBtn.isEnabled = !text.isEmpty
     }
-    
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

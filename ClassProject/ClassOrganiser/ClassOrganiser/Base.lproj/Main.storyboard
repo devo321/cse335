@@ -344,7 +344,7 @@
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="dlu-ki-dOX">
                                 <rect key="frame" x="40" y="256" width="334" height="362"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Rgv-RL-rGk">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="X9d-So-o4P">
                                         <rect key="frame" x="0.0" y="0.0" width="334" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" systemColor="systemRedColor"/>
@@ -422,7 +422,6 @@
                                     <constraint firstItem="jtg-oy-32z" firstAttribute="height" secondItem="799-fT-d1P" secondAttribute="height" id="MSK-OL-Gph"/>
                                     <constraint firstItem="rEb-7O-5fN" firstAttribute="height" secondItem="EWy-9y-9ho" secondAttribute="height" id="ShT-MP-UlJ"/>
                                     <constraint firstItem="Nw8-pK-kVL" firstAttribute="height" secondItem="799-fT-d1P" secondAttribute="height" id="b0M-8c-sIc"/>
-                                    <constraint firstItem="TMq-xG-c6Q" firstAttribute="height" secondItem="Rgv-RL-rGk" secondAttribute="height" id="hqM-Dd-XfU"/>
                                     <constraint firstItem="Glf-eT-DFN" firstAttribute="height" secondItem="799-fT-d1P" secondAttribute="height" id="xpa-qI-fqc"/>
                                     <constraint firstItem="dSo-6b-QkS" firstAttribute="height" secondItem="799-fT-d1P" secondAttribute="height" id="xpg-nw-ct7"/>
                                 </constraints>
@@ -468,7 +467,7 @@
                         <outlet property="classNameTF" destination="799-fT-d1P" id="FXn-w2-1To"/>
                         <outlet property="classPhotoImg" destination="SGA-TA-z3H" id="x92-eH-h08"/>
                         <outlet property="classTimeTF" destination="cPv-0A-XIe" id="2fc-Hh-Fyh"/>
-                        <outlet property="errorLbl" destination="Rgv-RL-rGk" id="zIq-yr-eRq"/>
+                        <outlet property="errorLbl" destination="X9d-So-o4P" id="Wq4-vB-d4X"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u9h-H5-nun" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

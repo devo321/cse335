@@ -10,33 +10,79 @@ import Firebase
 
 class DBUtilities{
     
-    /*
-    static func getUserClasses() -> [UserClass]{
-        var docId:String
-        var retrievedClasses = [UserClass]()
+    static func addUserClass(newClass:UserClass) -> String?{
+        var storeError:String?
         let db = Firestore.firestore()
-        guard let uid = Auth.auth().currentUser?.uid else{return retrievedClasses}
-        db.collection("users").whereField("uid", isEqualTo: uid).addSnapshotListener { (querySnapshot, error) in
-            if error == nil && querySnapshot != nil {
-                let docId = querySnapshot?.documents[0].documentID
-                db.collection("users").document(docId!).collection("classes").addSnapshotListener { (querySnap, error) in
-                    guard let documents = querySnap?.documents else{print("No Classes");return}
-                    var imageData:UIImage?
-                    retrievedClasses = documents.map { (querySnap) -> UserClass in
-                        let data = querySnap.data()
-                        if let decodedData = Data(base64Encoded: data["class_img"] as! String, options: .ignoreUnknownCharacters){
-                            imageData = UIImage(data: decodedData)
-                        }
-                        return UserClass.init(name: data["class_name"] as! String, desc: data["class_desc"] as! String, img: imageData!, color: data["class_color"] as! String, link: data["class_link"] as! String, location: data["class_location"] as! GeoPoint, meetingTime: data["meeting_time"] as! Dictionary<String,String>)
-        
+        var docId:String?
+        guard let uid = Auth.auth().currentUser?.uid else{
+            return "Unable to get UID"
+        }
+        let storageRef = Storage.storage().reference().child("images")
+        let fileName = UUID().uuidString
+        let compressedImage = newClass.classImage?.compressTo(5)
+        guard let imageData = compressedImage?.jpegData(compressionQuality: 1) else {return nil}
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpg"
+        let uploadTask = storageRef.child(uid).child(fileName).putData(imageData, metadata: metaData)
+        uploadTask.observe( .success) { (snapshot) in
+            print("UPLOAD SUCCESS")
+        }
+        db.collection("users").whereField("uid", isEqualTo: uid).getDocuments { (user, error) in
+            if error == nil && user != nil{
+                docId = user?.documents[0].documentID
+                db.collection("users").document(docId!).collection("classes").addDocument(data: [Constants.Database.NAME:newClass.className,
+                                                                                                 Constants.Database.DESC:newClass.className,
+                                                                                                 Constants.Database.COLOR:newClass.getColorAsString(),
+                                                                                                 Constants.Database.LINK:newClass.classLink,
+                                                                                                 Constants.Database.LOCATION:newClass.location,
+                                                                                                 Constants.Database.IMG:fileName,
+                                                                                                 Constants.Database.MEETING:newClass.classMeetingTime]) { (error) in
+                    if error == nil {
+                        print("CLASS ADDED")
                     }
-                    print(retrievedClasses[0].printClass())
+                    else{
+                        print(String(describing: error))
+                    }
                 }
             }
         }
-        return retrievedClasses
-    }*/
-
+        return nil
+    }
     
+    func uploadImage(image: UIImage, completion:@escaping((String?) -> () )){
+        guard let uid = Auth.auth().currentUser?.uid else {
+            print("Unable to get UID")
+            return
+        }
+        
+        let storageRef = Storage.storage().reference().child("images")
+        let fileName = GeneralUtilities.randomString(length: 20)
+        let compressedImage = image.compressTo(1)
+        guard let imageData = compressedImage?.jpegData(compressionQuality: 1) else {completion(nil); return}
+        let metaData = StorageMetadata()
+        metaData.contentType = "img/jpg"
+        
+        storageRef.child(uid).child(fileName).putData(imageData, metadata: metaData) { (metaData, error) in
+            guard let metaData = metaData else{
+                return
+            }
+            metaData.contentType = "image/jpg"
+            storageRef.downloadURL { (url, error) in
+                guard let imageUrl = url else{
+                    completion(nil)
+                    print("NIL COMPLETION")
+                    return
+                }
+                let imgUrlString = imageUrl.absoluteString
+                print("UPLOAD COMPLETE")
+                completion(imgUrlString)
+            }
+        }
+        
+        
+    }
     
 }
+
+
+

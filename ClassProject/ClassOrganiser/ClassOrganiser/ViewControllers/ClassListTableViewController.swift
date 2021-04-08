@@ -17,7 +17,7 @@ class ClassListTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserClasses()
-        print(otherClasses.count)
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -122,10 +122,21 @@ class ClassListTableViewController: UITableViewController {
     
     
     func getUserClasses(){
+        let pending = UIAlertController(title: "Loading Classes\n\n\n", message: nil, preferredStyle: .alert)
+        let indicator = UIActivityIndicatorView(frame: pending.view.bounds)
+        indicator.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        pending.view.addSubview(indicator)
+        indicator.isUserInteractionEnabled = false
+        indicator.startAnimating()
+
+        self.present(pending, animated: true, completion: nil)
+        
         let db = Firestore.firestore()
         var docId:String?
-        guard let uid = Auth.auth().currentUser?.uid else{return}
+        var counter:Int = 0
         
+        
+        guard let uid = Auth.auth().currentUser?.uid else{return}
         db.collection("users").whereField("uid", isEqualTo: uid).getDocuments { (snapshot, error) in
             if error == nil && snapshot != nil {
                 docId = (snapshot?.documents[0].documentID)!
@@ -134,19 +145,41 @@ class ClassListTableViewController: UITableViewController {
                         var imageData: UIImage?
                         for doc in querySnap!.documents{
                             let data = doc.data()
-                            if let decodedData = Data(base64Encoded: data["class_img"] as! String, options: .ignoreUnknownCharacters) {
-                                imageData = UIImage(data: decodedData)
-                            }
                             let user = UserClass(name: data["class_name"] as! String,
                                                        desc: data["class_desc"] as! String,
-                                                       img: imageData!,
+                                                       img: UIImage(named: "White-Square.jpg")!,
                                                        color: data["class_color"] as! String,
                                                        link: data["class_link"] as! String,
-                                                       location: data["class_location"] as! GeoPoint,
+                                                       location: data["class_location"] as! String,
                                                        meetingTime: data["meeting_time"] as! Dictionary<String,String>)
                             self.userClasses.append(user)
+                            let fileName = data["class_img"] as! String
+                            print(fileName)
+                            let pathString = "images/" + uid + "/" + fileName
+                            let pathRefrence = Storage.storage().reference(withPath: pathString)
+                            let downloadTask = pathRefrence.getData(maxSize: 10 * 1024 * 1024) { (data, error) in
+                                if let error = error {
+                                    //Error!
+                                    print(error.localizedDescription)
+                                }
+                                else{
+                                    imageData = UIImage(data: data!)
+                                    user.classImage = imageData
+                                    self.tableView.reloadData()
+                                }
+                            }
+                            downloadTask.observe(.success) { (snap) in
+                                counter += 1
+                                if counter == self.userClasses.count{
+                                    pending.dismiss(animated: true, completion: nil)
+                                }
+                                self.tableView.reloadData()
+                            }
+                            if counter == self.userClasses.count{
+                                downloadTask.removeAllObservers()
+                            }
                         }
-                        self.tableView.reloadData()
+                    
                     }
                 }
             }
