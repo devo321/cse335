@@ -12,6 +12,8 @@
 		45098E20261C37B100C21A48 /* White-Square.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 45098E1F261C37B100C21A48 /* White-Square.jpg */; };
 		4531972D261BD1230049A47A /* DBUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4531972C261BD1230049A47A /* DBUtilities.swift */; };
 		45319731261BDC200049A47A /* ClassTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45319730261BDC200049A47A /* ClassTableViewCell.swift */; };
+		454D168D26202CA900188519 /* ClassDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454D168C26202CA900188519 /* ClassDetailViewController.swift */; };
+		454D169026203D1400188519 /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 454D168F26203D1400188519 /* EditViewController.swift */; };
 		456CD196261D8F960071FFB2 /* addNewClassViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 456CD195261D8F960071FFB2 /* addNewClassViewController.swift */; };
 		4570DD3B2616E6C8008BFAEC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4570DD3A2616E6C8008BFAEC /* AppDelegate.swift */; };
 		4570DD3D2616E6C8008BFAEC /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4570DD3C2616E6C8008BFAEC /* SceneDelegate.swift */; };
@@ -36,6 +38,8 @@
 		45098E1F261C37B100C21A48 /* White-Square.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "White-Square.jpg"; sourceTree = "<group>"; };
 		4531972C261BD1230049A47A /* DBUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUtilities.swift; sourceTree = "<group>"; };
 		45319730261BDC200049A47A /* ClassTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassTableViewCell.swift; sourceTree = "<group>"; };
+		454D168C26202CA900188519 /* ClassDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassDetailViewController.swift; sourceTree = "<group>"; };
+		454D168F26203D1400188519 /* EditViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewController.swift; sourceTree = "<group>"; };
 		456CD195261D8F960071FFB2 /* addNewClassViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addNewClassViewController.swift; sourceTree = "<group>"; };
 		4570DD372616E6C8008BFAEC /* ClassOrganiser.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ClassOrganiser.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4570DD3A2616E6C8008BFAEC /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -135,9 +139,11 @@
 		45EEAF2D2616FE4D0024972B /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				454D168F26203D1400188519 /* EditViewController.swift */,
 				45EEAF2E2616FEAD0024972B /* SignUpViewController.swift */,
 				45EEAF322616FEBA0024972B /* LogInViewController.swift */,
 				45EEAF362616FEF70024972B /* ViewController.swift */,
+				454D168C26202CA900188519 /* ClassDetailViewController.swift */,
 				45B495DB2617E60C002E56F3 /* TestViewController.swift */,
 				45098DE7261BDD2C00C21A48 /* ClassListTableViewController.swift */,
 				456CD195261D8F960071FFB2 /* addNewClassViewController.swift */,
@@ -283,10 +289,12 @@
 			files = (
 				4531972D261BD1230049A47A /* DBUtilities.swift in Sources */,
 				45EEAF59261711280024972B /* AuthUtilities.swift in Sources */,
+				454D168D26202CA900188519 /* ClassDetailViewController.swift in Sources */,
 				45EEAF372616FEF70024972B /* ViewController.swift in Sources */,
 				4570DD3B2616E6C8008BFAEC /* AppDelegate.swift in Sources */,
 				45EEAF332616FEBA0024972B /* LogInViewController.swift in Sources */,
 				4570DD3D2616E6C8008BFAEC /* SceneDelegate.swift in Sources */,
+				454D169026203D1400188519 /* EditViewController.swift in Sources */,
 				456CD196261D8F960071FFB2 /* addNewClassViewController.swift in Sources */,
 				4570DD452616E6C8008BFAEC /* ClassOrganiser.xcdatamodeld in Sources */,
 				45EEAF2F2616FEAD0024972B /* SignUpViewController.swift in Sources */,

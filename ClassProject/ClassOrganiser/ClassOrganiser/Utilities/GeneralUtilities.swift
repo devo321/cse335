@@ -13,9 +13,36 @@ class GeneralUtilities{
     
     static func randomString(length:Int) -> String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        var generatedString = String((0..<length).map{ _ in letters.randomElement()! })
+        let generatedString = String((0..<length).map{ _ in letters.randomElement()! })
         
         return generatedString
+    }
+    
+    static func isUniqueName(name:String, classes:[UserClass]) -> Bool{
+        if classes.count > 0 {
+            for  userClass in classes{
+                if userClass.className == name {
+                    return false
+                }
+            }
+        }
+        return true //CHANGE LATER
+    }
+    
+    
+    static func buildMeetingString(meetingTime:Dictionary<String,String>) -> String? {
+        if meetingTime["class_day"]!.isEmpty && meetingTime["class_time"]!.isEmpty {
+            return nil
+        }
+        else if meetingTime["class_day"]!.isEmpty{
+            return meetingTime["class_time"]!
+        }
+        else if meetingTime["class_time"]!.isEmpty{
+            return meetingTime["class_day"]!
+        }
+        else{
+            return meetingTime["class_day"]! + " at " + meetingTime["class_time"]!
+        }
     }
 }
 

@@ -9,7 +9,7 @@ import UIKit
 import Firebase
 
 
-class ClassListTableViewController: UITableViewController {
+class ClassListTableViewController: UITableViewController, sendDataBack {
 
     var userClasses = [UserClass]()
     
@@ -45,7 +45,8 @@ class ClassListTableViewController: UITableViewController {
         // Configure the cell...
         let thisClass = userClasses[indexPath.row]
         cell.classNameLbl.text = thisClass.className
-        cell.classMeetingTimeLbl.text = thisClass.classMeetingTime["class_day"]! + " at " + thisClass.classMeetingTime["class_time"]!
+        cell.classMeetingTimeLbl.text = GeneralUtilities.buildMeetingString(meetingTime: thisClass.classMeetingTime)
+            //thisClass.classMeetingTime["class_day"]! + " at " + thisClass.classMeetingTime["class_time"]!
         cell.classImg.image = thisClass.classImage?.resizeImageWithBounds(bounds: CGSize.init(width: 80, height: 80))
         
         
@@ -93,7 +94,7 @@ class ClassListTableViewController: UITableViewController {
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    /*
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
@@ -101,7 +102,7 @@ class ClassListTableViewController: UITableViewController {
         
         switch(segue.identifier ?? ""){
         case "ShowDetail":
-            guard let detailView = segue.destination as? DetailTestViewController else{
+            guard let detailView = segue.destination as? ClassDetailViewController else{
                 fatalError("Unexpected destination: \(segue.destination)")
             }
             guard let selectedClassCell = sender as? ClassTableViewCell else {
@@ -111,19 +112,47 @@ class ClassListTableViewController: UITableViewController {
                 fatalError("The selected cell is not being displayed by the table")
             }
             let selectedClass = userClasses[indexPath.row]
-            detailView.userClass = selectedClass
+            detailView.thisClass = selectedClass
+            detailView.classes = userClasses
+            detailView.delegate = self
+            
+            
+            
+        case "AddClass":
+            guard let navController = segue.destination as? UINavigationController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            guard let childVC = navController.topViewController as? addNewClassViewController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            childVC.classes = userClasses
             
         default:
             fatalError("Unexpected Segue Identifier; \(String(describing: segue.identifier))")
             
         }
-    }*/
+    }
     
     @IBAction func unwindToClassList(sender: UIStoryboardSegue){
         if let sourceViewController = sender.source as? addNewClassViewController, let newClass = sourceViewController.rtnClass {
             let newIndexPath = IndexPath(row: userClasses.count, section: 0)
             userClasses.append(newClass)
             tableView.insertRows(at: [newIndexPath], with: .automatic)
+        }
+        if let sourceViewController = sender.source as? ClassDetailViewController, let updatedClass = sourceViewController.thisClass{
+            if let selectedIndexPath = tableView.indexPathForSelectedRow{
+                print("Here")
+                userClasses[selectedIndexPath.row] = updatedClass
+                tableView.reloadRows(at: [selectedIndexPath], with: .none )
+            }
+        }
+    }
+    
+    func sendDataToClasses(thisClass:UserClass){
+        if let selectedIndexPath = tableView.indexPathForSelectedRow{
+            print("HERERE")
+            userClasses[selectedIndexPath.row] = thisClass
+            tableView.reloadRows(at: [selectedIndexPath], with: .none)
         }
     }
     
@@ -155,13 +184,13 @@ class ClassListTableViewController: UITableViewController {
                         var imageData: UIImage?
                         for doc in querySnap!.documents{
                             let data = doc.data()
-                            let user = UserClass(name: data["class_name"] as! String,
-                                                       desc: data["class_desc"] as! String,
+                            let user = UserClass(name: data[Constants.Database.NAME] as! String,
+                                                 desc: data[Constants.Database.DESC] as! String,
                                                        img: UIImage(named: "White-Square.jpg")!,
-                                                       color: data["class_color"] as! String,
-                                                       link: data["class_link"] as! String,
-                                                       location: data["class_location"] as! String,
-                                                       meetingTime: data["meeting_time"] as! Dictionary<String,String>)
+                                                       color: data[Constants.Database.COLOR] as! String,
+                                                       link: data[Constants.Database.LINK] as! String,
+                                                       location: data[Constants.Database.LOCATION] as! String,
+                                                       meetingTime: data[Constants.Database.MEETING] as! Dictionary<String,String>)
                             self.userClasses.append(user)
                             let fileName = data["class_img"] as! String
                             print(fileName)

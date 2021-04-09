@@ -23,6 +23,7 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     
     var userImage:UIImage?
     var rtnClass:UserClass?
+    var classes = [UserClass]()
     
     
     var activeTextField:UITextField? = nil
@@ -33,10 +34,7 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         errorLbl.isHidden = true
         classNameTF.delegate = self
-        //classAddressTF.delegate = self
-        //classLinkTF.delegate = self
         updateAddButtonState()
-        // Do any additional setup after loading the view.
     }
     
     
@@ -54,6 +52,7 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     
     
     //MARK: - Keyboard
+    //These functions move the keyboard around
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
@@ -178,6 +177,19 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     //MARK: - Private Methods
     private func updateAddButtonState(){
         let text = classNameTF.text ?? ""
-        addBtn.isEnabled = !text.isEmpty
+        print(text)
+        if(text.isEmpty){
+            errorLbl.isHidden = true
+            addBtn.isEnabled = false
+        }
+        else if GeneralUtilities.isUniqueName(name: text, classes: classes) {
+            errorLbl.isHidden = true
+            addBtn.isEnabled = true
+        }
+        else{
+            addBtn.isEnabled = false
+            errorLbl.text = "Class name must be unique"
+            errorLbl.isHidden = false
+        }
     }
 }
