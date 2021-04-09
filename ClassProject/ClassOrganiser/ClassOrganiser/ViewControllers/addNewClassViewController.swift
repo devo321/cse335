@@ -21,6 +21,9 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     @IBOutlet weak var classLinkTF: UITextField!
     @IBOutlet weak var errorLbl: UILabel!
     
+    var userImage:UIImage?
+    var rtnClass:UserClass?
+    
     
     var activeTextField:UITextField? = nil
     
@@ -34,6 +37,19 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
         //classLinkTF.delegate = self
         updateAddButtonState()
         // Do any additional setup after loading the view.
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        guard let button = sender as? UIBarButtonItem, button == addBtn else {
+            print("Add button not pressed, cancelling")
+            return
+        }
+        let dictionary:[String:String] = ["class_day":classDayTF.text ?? "", "class_time":classTimeTF.text ?? ""]
+        addBtnTapped((Any).self)
+        
+        rtnClass = UserClass(name: classNameTF.text ?? "" , desc: classDescTF.text ?? "" , img: classPhotoImg.image!, color: "black", link: classLinkTF.text ?? "", location: classAddressTF.text ?? "", meetingTime: dictionary)
     }
     
     
@@ -125,6 +141,10 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
             newClass.printClass()
             let result = DBUtilities.addUserClass(newClass: newClass)
             print(String(describing: result))
+            
+            
+            
+            
         }
         else{
             let classImg = UIImage(named: "White-Square.jpg")

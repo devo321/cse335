@@ -311,6 +311,7 @@
                                     <outlet property="classImg" destination="qRF-Qv-unS" id="hxX-w4-OpA"/>
                                     <outlet property="classMeetingTimeLbl" destination="SEA-e1-6kd" id="hA5-OH-vQ8"/>
                                     <outlet property="classNameLbl" destination="UEg-Gq-GAk" id="ryc-JY-MaG"/>
+                                    <segue destination="wlI-83-E5T" kind="show" id="9mG-8F-Bzs"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -454,6 +455,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Add" id="wGL-Tm-dVP">
                             <connections>
                                 <action selector="addBtnTapped:" destination="eVT-bg-xpQ" id="YLg-IJ-tDh"/>
+                                <segue destination="8Ab-VF-BDd" kind="unwind" unwindAction="unwindToClassListWithSender:" id="sfy-2H-PT7"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -471,13 +473,14 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="u9h-H5-nun" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                <exit id="8Ab-VF-BDd" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer id="IRR-ZY-QbN">
                     <connections>
                         <action selector="imageGestureTapped:" destination="eVT-bg-xpQ" id="WLd-pT-gnz"/>
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2853.6231884057975" y="-675"/>
+            <point key="canvasLocation" x="2846" y="-255"/>
         </scene>
         <!--Test View Controller-->
         <scene sceneID="Yq3-Fi-5GV">
@@ -598,6 +601,22 @@
             </objects>
             <point key="canvasLocation" x="-4474" y="-441"/>
         </scene>
+        <!--View Controller-->
+        <scene sceneID="boG-p5-r0d">
+            <objects>
+                <viewController id="wlI-83-E5T" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="yPl-1s-XtB">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="QgF-Y3-mRm"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="ThI-JV-n6N"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="yEf-Ce-Wdk" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1861" y="-1023"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="zWy-8K-gJj">
             <objects>
@@ -614,7 +633,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ndW-Dh-g4s" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1944.9275362318842" y="-675"/>
+            <point key="canvasLocation" x="1861" y="-255"/>
         </scene>
     </scenes>
     <resources>
