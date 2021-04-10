@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import os.log
 
 class EditViewController: UIViewController {
 
@@ -33,6 +34,8 @@ class EditViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    //MARK: Load and Set View Information 
+    
     func setValues(){
         self.classImg.image = thisClassEdit?.classImage
         self.classNameLbl.text = thisClassEdit?.className
@@ -46,13 +49,9 @@ class EditViewController: UIViewController {
 
     
     // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
         guard let button = sender as? UIBarButtonItem, button == saveBtn else {
-            print("Save Not pressed, Cancelling")
+            os_log("Save not pressed, Cancelling")
             return
         }
         thisClassEdit?.classDescription = self.classDescTF.text ?? ""
@@ -61,6 +60,7 @@ class EditViewController: UIViewController {
         thisClassEdit?.location = self.classLocationTF.text ?? ""
         thisClassEdit?.classLink = self.classLinkTF.text ?? ""
         rtnClass = thisClassEdit
+        DBUtilities.updateClass(toUpdate: rtnClass!)
         
         
         

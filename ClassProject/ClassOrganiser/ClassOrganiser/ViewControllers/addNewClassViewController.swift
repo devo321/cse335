@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import os.log
 
 class addNewClassViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextFieldDelegate {
 
@@ -37,11 +38,11 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
         updateAddButtonState()
     }
     
-    
+    //If user presses add button, set values up to return to table view
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         guard let button = sender as? UIBarButtonItem, button == addBtn else {
-            print("Add button not pressed, cancelling")
+            //Add not pressed, return to parent view
             return
         }
         let dictionary:[String:String] = ["class_day":classDayTF.text ?? "", "class_time":classTimeTF.text ?? ""]
@@ -52,7 +53,7 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     
     
     //MARK: - Keyboard
-    //These functions move the keyboard around
+    //Moves view so that each text field is accessable with the keyboard shown on screen
     @objc func keyboardWillShow(notification: NSNotification) {
         if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             if self.view.frame.origin.y == 0 {
@@ -84,23 +85,24 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
         self.present(alert, animated: true, completion: nil)
         
     }
-    
+    //Open camera
     func openCamera(){
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.camera){
             let imagePicker = UIImagePickerController()
             imagePicker.delegate = self
             imagePicker.sourceType = UIImagePickerController.SourceType.camera
+            
             imagePicker.allowsEditing = false
             self.present(imagePicker, animated: true, completion: nil)
         }
         else{
-            let alert = UIAlertController(title: "Warning", message: "You don't have permission to access the camera", preferredStyle: .alert)
+            let alert = UIAlertController(title: "Warning", message: "You don't have permission to access the camera or there is no camera available for this device. Please check privacy settings", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
         
     }
-    
+    //Open gallery
     func openGallery(){
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerController.SourceType.photoLibrary){
             let imagePicker = UIImagePickerController()
@@ -115,7 +117,7 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
             self.present(alert, animated: true, completion: nil)
         }
     }
-    
+    //get image from image picker
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[.originalImage] as? UIImage{
             self.classPhotoImg.image = pickedImage
@@ -136,24 +138,20 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
         if let classImg = self.classPhotoImg.image{
             let dictionary:[String:String] = ["class_day":classDay ?? "", "class_time":classTime ?? ""]
             let newClass = UserClass.init(name: className!, desc: classDesc ?? "", img: classImg, color: "black", link: classLink ?? "", location: classAddr ?? "", meetingTime: dictionary)
-            print("Class Image Success")
-            newClass.printClass()
+            os_log("ADD NEW CLASS: Image load Success")
             let result = DBUtilities.addUserClass(newClass: newClass)
             print(String(describing: result))
-            
-            
-            
-            
         }
         else{
             let classImg = UIImage(named: "White-Square.jpg")
             let dictionary:[String:String] = ["class_day":classDay ?? "", "class_time":classTime ?? ""]
             let newClass = UserClass.init(name: className!, desc: classDesc ?? "", img: classImg!, color: "black", link: classLink ?? "", location: classAddr ?? "", meetingTime: dictionary)
-            print("Class Image Fail")
             newClass.printClass()
+            os_log("ADD NEW CLASS: Class Image load fail")
         }
         dismiss(animated: true, completion: nil)
     }
+    
     
     @IBAction func cancelBtnTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -161,11 +159,12 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     
     
     //MARK: - UITextFieldDelegate
+    //Check if user is editing a text field
     func textFieldDidBeginEditing(_ textField: UITextField) {
         addBtn.isEnabled = false
         self.activeTextField = textField
     }
-    
+    //Check if user is done editing a text field
     func textFieldDidEndEditing(_ textField: UITextField) {
         self.activeTextField = nil
         updateAddButtonState()
@@ -175,6 +174,7 @@ class addNewClassViewController: UIViewController, UIImagePickerControllerDelega
     
     
     //MARK: - Private Methods
+    //Update if user can tap add button or not, based on values in text fields
     private func updateAddButtonState(){
         let text = classNameTF.text ?? ""
         print(text)

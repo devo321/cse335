@@ -7,33 +7,24 @@
 
 import UIKit
 import Firebase
+import os.log
 
 
-class ClassListTableViewController: UITableViewController, sendDataBack {
-
-    var userClasses = [UserClass]()
+class ClassListTableViewController: UITableViewController{
     
     override func viewDidLoad() {
         super.viewDidLoad()
         getUserClasses()
-        
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
 
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return userClasses.count
+        return SharedClasses.sharedInstance.classArray.count
     }
 
     
@@ -42,11 +33,10 @@ class ClassListTableViewController: UITableViewController, sendDataBack {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as? ClassTableViewCell else{
             fatalError("The dequeued cell is not an instance of MealTableViewCell.")
         }
-        // Configure the cell...
-        let thisClass = userClasses[indexPath.row]
+        //Configure the cell
+        let thisClass = SharedClasses.sharedInstance.classArray[indexPath.row]
         cell.classNameLbl.text = thisClass.className
         cell.classMeetingTimeLbl.text = GeneralUtilities.buildMeetingString(meetingTime: thisClass.classMeetingTime)
-            //thisClass.classMeetingTime["class_day"]! + " at " + thisClass.classMeetingTime["class_time"]!
         cell.classImg.image = thisClass.classImage?.resizeImageWithBounds(bounds: CGSize.init(width: 80, height: 80))
         
         
@@ -65,11 +55,9 @@ class ClassListTableViewController: UITableViewController, sendDataBack {
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            print(indexPath.row)
-            userClasses[indexPath.row].printClass()
-            let toDeleteString = userClasses[indexPath.row].className
+            let toDeleteString = SharedClasses.sharedInstance.classArray[indexPath.row].className//userClasses[indexPath.row].className
             DBUtilities.deleteClass(toRemove: toDeleteString)
-            userClasses.remove(at: indexPath.row)
+            SharedClasses.sharedInstance.classArray.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             self.tableView.reloadData()
         }    
@@ -100,7 +88,9 @@ class ClassListTableViewController: UITableViewController, sendDataBack {
         // Pass the selected object to the new view controller.
         super.prepare(for: segue, sender: sender)
         
+        //Determine which destination user is going to
         switch(segue.identifier ?? ""){
+        //Detail view
         case "ShowDetail":
             guard let detailView = segue.destination as? ClassDetailViewController else{
                 fatalError("Unexpected destination: \(segue.destination)")
@@ -111,13 +101,10 @@ class ClassListTableViewController: UITableViewController, sendDataBack {
             guard let indexPath = tableView.indexPath(for: selectedClassCell) else {
                 fatalError("The selected cell is not being displayed by the table")
             }
-            let selectedClass = userClasses[indexPath.row]
+            let selectedClass = SharedClasses.sharedInstance.classArray[indexPath.row]//userClasses[indexPath.row]
             detailView.thisClass = selectedClass
-            detailView.classes = userClasses
-            detailView.delegate = self
-            
-            
-            
+            detailView.classes = SharedClasses.sharedInstance.classArray//userClasses
+        //Add New class view
         case "AddClass":
             guard let navController = segue.destination as? UINavigationController else {
                 fatalError("Unexpected destination: \(segue.destination)")
@@ -125,41 +112,38 @@ class ClassListTableViewController: UITableViewController, sendDataBack {
             guard let childVC = navController.topViewController as? addNewClassViewController else {
                 fatalError("Unexpected destination: \(segue.destination)")
             }
-            childVC.classes = userClasses
+            childVC.classes = SharedClasses.sharedInstance.classArray //userClasses
             
         default:
             fatalError("Unexpected Segue Identifier; \(String(describing: segue.identifier))")
             
         }
     }
-    
+    //Unwind segue
     @IBAction func unwindToClassList(sender: UIStoryboardSegue){
         if let sourceViewController = sender.source as? addNewClassViewController, let newClass = sourceViewController.rtnClass {
-            let newIndexPath = IndexPath(row: userClasses.count, section: 0)
-            userClasses.append(newClass)
+            let newIndexPath = IndexPath(row: SharedClasses.sharedInstance.classArray.count/*userClasses.count*/, section: 0)
+            //userClasses.append(newClass)
+            SharedClasses.sharedInstance.classArray.append(newClass)
             tableView.insertRows(at: [newIndexPath], with: .automatic)
         }
-        if let sourceViewController = sender.source as? ClassDetailViewController, let updatedClass = sourceViewController.thisClass{
+        if let sourceViewController = sender.source as? EditViewController, let updatedClass = sourceViewController.thisClassEdit{
             if let selectedIndexPath = tableView.indexPathForSelectedRow{
-                print("Here")
-                userClasses[selectedIndexPath.row] = updatedClass
-                tableView.reloadRows(at: [selectedIndexPath], with: .none )
+                //userClasses[selectedIndexPath.row] = updatedClass
+                SharedClasses.sharedInstance.classArray[selectedIndexPath.row] = updatedClass
             }
         }
     }
-    
-    func sendDataToClasses(thisClass:UserClass){
-        if let selectedIndexPath = tableView.indexPathForSelectedRow{
-            print("HERERE")
-            userClasses[selectedIndexPath.row] = thisClass
-            tableView.reloadRows(at: [selectedIndexPath], with: .none)
-        }
+    //Check if this view has appeared, reload table view
+    override func viewDidAppear(_ animated: Bool) {
+        tableView.reloadData()
     }
     
     
     
+    //MARK: - Initial Load
     
-    
+    //Get user classes from database
     func getUserClasses(){
         let pending = UIAlertController(title: "Loading Classes\n\n\n", message: nil, preferredStyle: .alert)
         let indicator = UIActivityIndicatorView(frame: pending.view.bounds)
@@ -179,51 +163,57 @@ class ClassListTableViewController: UITableViewController, sendDataBack {
         db.collection("users").whereField("uid", isEqualTo: uid).getDocuments { (snapshot, error) in
             if error == nil && snapshot != nil {
                 docId = (snapshot?.documents[0].documentID)!
+                db.collection("users").document(docId!)
                 db.collection("users").document(docId!).collection("classes").getDocuments { (querySnap, error) in
-                    if error == nil  && querySnap != nil {
-                        var imageData: UIImage?
-                        for doc in querySnap!.documents{
-                            let data = doc.data()
-                            let user = UserClass(name: data[Constants.Database.NAME] as! String,
-                                                 desc: data[Constants.Database.DESC] as! String,
-                                                       img: UIImage(named: "White-Square.jpg")!,
-                                                       color: data[Constants.Database.COLOR] as! String,
-                                                       link: data[Constants.Database.LINK] as! String,
-                                                       location: data[Constants.Database.LOCATION] as! String,
-                                                       meetingTime: data[Constants.Database.MEETING] as! Dictionary<String,String>)
-                            self.userClasses.append(user)
-                            let fileName = data["class_img"] as! String
-                            print(fileName)
-                            let pathString = "images/" + uid + "/" + fileName
-                            let pathRefrence = Storage.storage().reference(withPath: pathString)
-                            let downloadTask = pathRefrence.getData(maxSize: 10 * 1024 * 1024) { (data, error) in
-                                if let error = error {
-                                    //Error!
-                                    print(error.localizedDescription)
+                    if error == nil  && querySnap != nil{
+                        if querySnap!.isEmpty != true{
+                            var imageData: UIImage?
+                            for doc in querySnap!.documents{
+                                let data = doc.data()
+                                let user = UserClass(name: data[Constants.Database.NAME] as! String,
+                                                     desc: data[Constants.Database.DESC] as! String,
+                                                           img: UIImage(named: "White-Square.jpg")!,
+                                                           color: data[Constants.Database.COLOR] as! String,
+                                                           link: data[Constants.Database.LINK] as! String,
+                                                           location: data[Constants.Database.LOCATION] as! String,
+                                                           meetingTime: data[Constants.Database.MEETING] as! Dictionary<String,String>)
+                                SharedClasses.sharedInstance.classArray.append(user)
+                                let fileName = data["class_img"] as! String
+                                let pathString = "images/" + uid + "/" + fileName
+                                let pathRefrence = Storage.storage().reference(withPath: pathString)
+                                if SharedClasses.sharedInstance.classArray.count > 0{
+                                    
                                 }
-                                else{
-                                    imageData = UIImage(data: data!)
-                                    user.classImage = imageData
+                                let downloadTask = pathRefrence.getData(maxSize: 10 * 1024 * 1024) { (data, error) in
+                                    if error != nil {
+                                        //Error!
+                                        os_log("GET USER CLASS: Error downloading class image")
+                                    }
+                                    else{
+                                        imageData = UIImage(data: data!)
+                                        user.classImage = imageData
+                                        self.tableView.reloadData()
+                                    }
+                                }
+                                downloadTask.observe(.success) { (snap) in
+                                    counter += 1
+                                    if counter == SharedClasses.sharedInstance.classArray.count/*self.userClasses.count*/{
+                                        pending.dismiss(animated: true, completion: nil)
+                                    }
                                     self.tableView.reloadData()
                                 }
-                            }
-                            downloadTask.observe(.success) { (snap) in
-                                counter += 1
-                                if counter == self.userClasses.count{
-                                    pending.dismiss(animated: true, completion: nil)
+                                if counter == SharedClasses.sharedInstance.classArray.count/*self.userClasses.count*/{
+                                    downloadTask.removeAllObservers()
                                 }
-                                self.tableView.reloadData()
-                            }
-                            if counter == self.userClasses.count{
-                                downloadTask.removeAllObservers()
                             }
                         }
-                    
-                    }
+                        else{
+                            pending.dismiss(animated: true, completion: nil)
+                        }
+                    }            
                 }
             }
         }
-        
     }
 }
 

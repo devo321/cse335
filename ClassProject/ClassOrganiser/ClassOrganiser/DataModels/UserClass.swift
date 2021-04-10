@@ -30,13 +30,6 @@ class UserClass{
         self.location = location
         self.classMeetingTime = meetingTime
     }
-    /*
-    convenience init?(name:String) {
-        if name.isEmpty {
-            return nil
-        }
-        //self.init(name: name, desc: "", img:UIImage(named: "White-Square.jpg")!, color:"black", link:"", location:GeoPoint.init(latitude: 0.0, longitude: 0.0), meetingTime:["nil":"nil"])
-    }*/
     
     
     func getColor() -> UIColor{
@@ -55,7 +48,6 @@ class UserClass{
         default:
             return UIColor.black
         }
-        //Finish other color types
     }
     
     func getColorAsString() -> String{

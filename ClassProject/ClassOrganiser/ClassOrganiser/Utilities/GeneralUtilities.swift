@@ -1,7 +1,7 @@
 //
 //  GeneralUtilities.swift
 //  ClassOrganiser
-//
+//  General utilities for use around the app
 //  Created by Deven Pile on 4/7/21.
 //
 
@@ -11,6 +11,7 @@ import Firebase
 
 class GeneralUtilities{
     
+    //Generate a random string
     static func randomString(length:Int) -> String {
         let letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let generatedString = String((0..<length).map{ _ in letters.randomElement()! })
@@ -18,6 +19,8 @@ class GeneralUtilities{
         return generatedString
     }
     
+    
+    //Check if new class name is matches any other class names of the user, returns false if a match is found
     static func isUniqueName(name:String, classes:[UserClass]) -> Bool{
         if classes.count > 0 {
             for  userClass in classes{
@@ -26,10 +29,10 @@ class GeneralUtilities{
                 }
             }
         }
-        return true //CHANGE LATER
+        return true
     }
     
-    
+    //Builds the string to be displayed from meeting time dictionary
     static func buildMeetingString(meetingTime:Dictionary<String,String>) -> String? {
         if meetingTime["class_day"]!.isEmpty && meetingTime["class_time"]!.isEmpty {
             return nil
@@ -50,10 +53,10 @@ class GeneralUtilities{
 
 
 
-
-
+//Image extentions, for use with dealing with images in the app
 extension UIImage {
     //MARK: - Resize Image with bounds
+    //Resizes the image to supplied bounds
     func resizeImageWithBounds(bounds: CGSize) -> UIImage {
         let horizontalRatio = bounds.width/size.width
         let verticalRatio = bounds.height/size.height
@@ -67,6 +70,7 @@ extension UIImage {
     }
     
     // MARK: - UIImage+Resize
+    //Compresses the image to specified size in MB
     func compressTo(_ expectedSizeInMb:Int) -> UIImage? {
         let sizeInBytes = expectedSizeInMb * 1024 * 1024
         var needCompress:Bool = true

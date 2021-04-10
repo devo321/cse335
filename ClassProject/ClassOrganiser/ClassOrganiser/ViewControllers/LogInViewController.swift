@@ -27,15 +27,9 @@ class LogInViewController: UIViewController {
         //Do additional styling here
     }
 
-    /*
-    // MARK: - Navigation
+    
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+   //MARK: - Log in User
     
     @IBAction func logInTapped(_ sender: Any) {
         //Validate Text fields
@@ -67,6 +61,9 @@ class LogInViewController: UIViewController {
         errorLBL.text = message
         errorLBL.isHidden = false
     }
+    
+    
+    // MARK: - Navigation
     
     func transitionToHome(){
         let homeView = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController)

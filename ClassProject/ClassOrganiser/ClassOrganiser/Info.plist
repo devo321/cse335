@@ -59,5 +59,23 @@
 	<string>Allows you to add photos to your classes</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Allows you to add photos to your classes</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow app to access your location?</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>NSIncludesSubdomains</key>
+			<true/>
+			<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+			<true/>
+			<key>NSTemporaryExceptionMinimumTLSVersion</key>
+			<string>TLSv1.1</string>
+			<key>http://api.geonames.org/</key>
+			<dict/>
+		</dict>
+	</dict>
 </dict>
 </plist>

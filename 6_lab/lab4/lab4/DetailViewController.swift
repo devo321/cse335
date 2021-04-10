@@ -95,7 +95,7 @@ class DetailViewController: UIViewController, MKMapViewDelegate, CLLocationManag
             guard let response = response else {
                 return
             }
-            print( response.mapItems )
+            print( response.mapItems 0
             var matchingItems:[MKMapItem] = []
             matchingItems = response.mapItems
             for i in 1...matchingItems.count - 1

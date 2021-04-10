@@ -1,15 +1,19 @@
 //
 //  DBUtilities.swift
 //  ClassOrganiser
-//
+//  Utilities for the Database
 //  Created by Deven Pile on 4/5/21.
 //
 
 import Foundation
 import Firebase
+import os.log
 
 class DBUtilities{
     
+    
+    //MARK: - Add New Class
+    //Adds new class to user
     static func addUserClass(newClass:UserClass) -> String?{
         let db = Firestore.firestore()
         var docId:String?
@@ -24,7 +28,7 @@ class DBUtilities{
         metaData.contentType = "image/jpg"
         let uploadTask = storageRef.child(uid).child(fileName).putData(imageData, metadata: metaData)
         uploadTask.observe( .success) { (snapshot) in
-            print("UPLOAD SUCCESS")
+            os_log("ADD NEW: Upload Success")
         }
         db.collection("users").whereField("uid", isEqualTo: uid).getDocuments { (user, error) in
             if error == nil && user != nil{
@@ -37,10 +41,10 @@ class DBUtilities{
                                                                                                  Constants.Database.IMG:fileName,
                                                                                                  Constants.Database.MEETING:newClass.classMeetingTime]) { (error) in
                     if error == nil {
-                        print("CLASS ADDED")
+                        os_log("ADD NEW: Class Added")
                     }
                     else{
-                        print(String(describing: error))
+                        os_log("ADD NEW: \(String(describing: error))")
                     }
                 }
             }
@@ -48,6 +52,45 @@ class DBUtilities{
         return nil
     }
     
+    //MARK: - Update Class
+    //Updates specified user class in the database
+    static func updateClass(toUpdate:UserClass){
+        let className = toUpdate.className
+        let db = Firestore.firestore()
+        var docId:String?
+        var classDocId:String?
+        guard let uid = Auth.auth().currentUser?.uid else{
+            os_log("UPDATE: Unable to get UID")
+            return
+        }
+        db.collection("users").whereField("uid", isEqualTo: uid).getDocuments { (userDoc, error) in
+            if error == nil && userDoc != nil {
+                docId = userDoc!.documents[0].documentID
+                db.collection("users").document(docId!).collection("classes").whereField("class_name", isEqualTo: className).getDocuments { (classDoc, error) in
+                    if error == nil && classDoc != nil{
+                        classDocId = classDoc!.documents[0].documentID
+                        db.collection("users").document(docId!).collection("classes").document(classDocId!).updateData([Constants.Database.DESC:toUpdate.classDescription,
+                                                                                                                        Constants.Database.MEETING:toUpdate.classMeetingTime,
+                                                                                                                        Constants.Database.LOCATION:toUpdate.location,
+                                                                                                                        Constants.Database.LINK:toUpdate.classLink]) { (error) in
+                            if error == nil{
+                                os_log("UPDATE: Update Success")
+                            }
+                            else{
+                                os_log("UPDATE: Update Fail")
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    
+    
+    //MARK: - Delete Class
+    //Deletes class from user 
     static func deleteClass(toRemove:String){
 
         var docId:String?
@@ -55,7 +98,7 @@ class DBUtilities{
         var imageString:String?
         let db = Firestore.firestore()
         guard let uid = Auth.auth().currentUser?.uid else{
-            print("Unable to get UID")
+            os_log("DELETE: Unable to get UID")
             return
         }
         let storageRef = Storage.storage().reference().child("images")
@@ -69,10 +112,10 @@ class DBUtilities{
                         imageString = (data["class_img"] as! String)
                         storageRef.child(uid).child(imageString!).delete { (err) in
                             if err == nil{
-                                print("Deleted Image")
+                                os_log("DELETE: Image Deleted")
                             }
                             else{
-                                print(String(describing: err))
+                                os_log("DELETE: \(String(describing: err))")
                             }
                         }
                     }
@@ -87,26 +130,26 @@ class DBUtilities{
                         classDocId = userClass?.documents[0].documentID
                         db.collection("users").document(docId!).collection("classes").document(classDocId!).delete { (error) in
                             if err == nil{
-                                print("Deleted class")
+                                os_log("DELETE CLASS: Deleted class successfully")
                             }
                             else{
-                                print("Error deleteing class")
+                                os_log("DELETE: \(String(describing: err))")
                             }
                         }
                     }
                 }
             }
         }
-        storageRef
         
     }
     
     
     
+    //MARK: - Upload Image
     
     func uploadImage(image: UIImage, completion:@escaping((String?) -> () )){
         guard let uid = Auth.auth().currentUser?.uid else {
-            print("Unable to get UID")
+            os_log("UPLOAD IMAGE: Unable to get UID")
             return
         }
         
@@ -125,11 +168,11 @@ class DBUtilities{
             storageRef.downloadURL { (url, error) in
                 guard let imageUrl = url else{
                     completion(nil)
-                    print("NIL COMPLETION")
+                    os_log("UPLOAD IMAGE: ERROR Completed nil")
                     return
                 }
                 let imgUrlString = imageUrl.absoluteString
-                print("UPLOAD COMPLETE")
+                os_log("UPLOAD IMAGE: Upload Complete")
                 completion(imgUrlString)
             }
         }

@@ -36,6 +36,9 @@ class ClassDetailViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    
+    //MARK: - Set Values for View controller
+    
     func setValues(){
         self.classImg.image = thisClass?.classImage
         self.classNameLbl.text = thisClass?.className
@@ -46,7 +49,7 @@ class ClassDetailViewController: UIViewController {
         self.openClassTypeBtn.isHidden = true
         self.locationAddrTITLE.isHidden = true
         self.locationAddrLbl.isHidden = true
-        
+        //Check which fields user has, display them if they have them
         if thisClass?.location != ""{
             self.locationAddrLbl.isHidden = false
             self.locationAddrLbl.text = thisClass?.location
@@ -71,7 +74,32 @@ class ClassDetailViewController: UIViewController {
         
     }
     
-
+    //MARK: - Open Link
+    //Opens class link in browser
+    @IBAction func openClassBtnTapped(_ sender: Any) {
+        if thisClass!.classLink.hasPrefix("https://") || thisClass!.classLink.hasPrefix("http://"){
+            guard let url = URL(string: thisClass!.classLink)else{return}
+            if #available(iOS 10, *){
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+            else{
+                UIApplication.shared.openURL(url)
+            }
+        }
+        else{
+            //Correct URL and try to open
+            let correctedUrl = "https://\(thisClass!.classLink)"
+            if UIApplication.shared.canOpenURL(URL(string: correctedUrl)!){
+                UIApplication.shared.open(URL(string: correctedUrl)!, options: [:], completionHandler: nil)
+            }
+            else{
+                let alert = UIAlertController(title: "Warning", message: "Unable to open link, Please update link and try again", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
     
     // MARK: - Navigation
 
@@ -84,26 +112,4 @@ class ClassDetailViewController: UIViewController {
         editView.thisClassEdit = thisClass
         
     }
-    @IBAction func unwindToDetailView(sender: UIStoryboardSegue) {
-        if let sourceViewController = sender.source as? EditViewController {
-            thisClass = sourceViewController.rtnClass
-            setValues()
-        }
-    }
-    override func willMove(toParent parent: UIViewController?) {
-        if !(parent?.isEqual(self.parent) ?? false) {
-            print("DIDMOVE")
-            if self.delegate != nil{
-                let data = thisClass!
-                if super.isViewLoaded{
-                    self.delegate?.sendDataToClasses(thisClass: data)
-                }
-                
-            }
-        }
-        //super.didMove(toParent: parent)
-    }
-
-
-
 }

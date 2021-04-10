@@ -22,15 +22,14 @@ class ViewController: UIViewController {
     func setUpElements(){
         //For later styling
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    
+    //MARK: -Navigation
+    //Used to take user back to main screen from Login/Sign up views
+    @IBAction func unwindToInitalView(sender: UIStoryboardSegue){
+        
     }
-    */
+    
+    
 
 }

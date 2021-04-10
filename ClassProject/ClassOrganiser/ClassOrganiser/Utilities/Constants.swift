@@ -1,7 +1,7 @@
 //
 //  Constants.swift
 //  ClassOrganiser
-//
+//  Constants for use around the progam, Helps avoid typos
 //  Created by Deven Pile on 4/2/21.
 //
 

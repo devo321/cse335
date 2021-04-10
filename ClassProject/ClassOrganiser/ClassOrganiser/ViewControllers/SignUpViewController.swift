@@ -32,16 +32,8 @@ class SignUpViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
+    //MARK: - Sign up new user
 
     
     @IBAction func signUpTapped(_ sender: Any) {
@@ -85,12 +77,18 @@ class SignUpViewController: UIViewController {
     
     
     
+    // MARK: - Navigation
+    
+    //Sets storyboard entry point to table view
     func transitionToHome(){
         let homeView = storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeViewController)
         view.window?.rootViewController = homeView
         view.window?.makeKeyAndVisible()
     }
     
+    
+    //MARK: - Error Handling
+    //Shows error if there is one
     func showError(_ message:String){
         errorLBL.text = message
         errorLBL.isHidden = false

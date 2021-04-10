@@ -21,7 +21,8 @@
 		4570DD452616E6C8008BFAEC /* ClassOrganiser.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 4570DD432616E6C8008BFAEC /* ClassOrganiser.xcdatamodeld */; };
 		4570DD472616E6C9008BFAEC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4570DD462616E6C9008BFAEC /* Assets.xcassets */; };
 		4570DD4A2616E6C9008BFAEC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4570DD482616E6C9008BFAEC /* LaunchScreen.storyboard */; };
-		45B495DC2617E60C002E56F3 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45B495DB2617E60C002E56F3 /* TestViewController.swift */; };
+		45728BDF2620F3C6006EA691 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45728BDE2620F3C6006EA691 /* MapViewController.swift */; };
+		45822DAC2620FBC2009CB01D /* SharedUserClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45822DAB2620FBC2009CB01D /* SharedUserClasses.swift */; };
 		45E96605261EAFB7000775C5 /* GeneralUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45E96604261EAFB7000775C5 /* GeneralUtilities.swift */; };
 		45EEAF2F2616FEAD0024972B /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EEAF2E2616FEAD0024972B /* SignUpViewController.swift */; };
 		45EEAF332616FEBA0024972B /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45EEAF322616FEBA0024972B /* LogInViewController.swift */; };
@@ -49,7 +50,8 @@
 		4570DD462616E6C9008BFAEC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4570DD492616E6C9008BFAEC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4570DD4B2616E6C9008BFAEC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		45B495DB2617E60C002E56F3 /* TestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		45728BDE2620F3C6006EA691 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		45822DAB2620FBC2009CB01D /* SharedUserClasses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUserClasses.swift; sourceTree = "<group>"; };
 		45E96604261EAFB7000775C5 /* GeneralUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralUtilities.swift; sourceTree = "<group>"; };
 		45EEAF2E2616FEAD0024972B /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		45EEAF322616FEBA0024972B /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
@@ -86,6 +88,7 @@
 			isa = PBXGroup;
 			children = (
 				45098DEB261BE24A00C21A48 /* UserClass.swift */,
+				45822DAB2620FBC2009CB01D /* SharedUserClasses.swift */,
 			);
 			path = DataModels;
 			sourceTree = "<group>";
@@ -144,9 +147,9 @@
 				45EEAF322616FEBA0024972B /* LogInViewController.swift */,
 				45EEAF362616FEF70024972B /* ViewController.swift */,
 				454D168C26202CA900188519 /* ClassDetailViewController.swift */,
-				45B495DB2617E60C002E56F3 /* TestViewController.swift */,
 				45098DE7261BDD2C00C21A48 /* ClassListTableViewController.swift */,
 				456CD195261D8F960071FFB2 /* addNewClassViewController.swift */,
+				45728BDE2620F3C6006EA691 /* MapViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -295,11 +298,12 @@
 				45EEAF332616FEBA0024972B /* LogInViewController.swift in Sources */,
 				4570DD3D2616E6C8008BFAEC /* SceneDelegate.swift in Sources */,
 				454D169026203D1400188519 /* EditViewController.swift in Sources */,
+				45822DAC2620FBC2009CB01D /* SharedUserClasses.swift in Sources */,
 				456CD196261D8F960071FFB2 /* addNewClassViewController.swift in Sources */,
 				4570DD452616E6C8008BFAEC /* ClassOrganiser.xcdatamodeld in Sources */,
 				45EEAF2F2616FEAD0024972B /* SignUpViewController.swift in Sources */,
 				45319731261BDC200049A47A /* ClassTableViewCell.swift in Sources */,
-				45B495DC2617E60C002E56F3 /* TestViewController.swift in Sources */,
+				45728BDF2620F3C6006EA691 /* MapViewController.swift in Sources */,
 				45E96605261EAFB7000775C5 /* GeneralUtilities.swift in Sources */,
 				45098DE8261BDD2C00C21A48 /* ClassListTableViewController.swift in Sources */,
 				45F84E8626171CBF00524FF4 /* Constants.swift in Sources */,
